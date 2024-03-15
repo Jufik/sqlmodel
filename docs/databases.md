@@ -1,9 +1,12 @@
 # Intro to Databases
 
-!!! info
-    Are you a seasoned developer and already know everything about databases? 🤓
+/// info
 
-    Then you can skip to the [Tutorial - User Guide: First Steps](tutorial/index.md){.internal-link target=_blank} right away.
+Are you a seasoned developer and already know everything about databases? 🤓
+
+Then you can skip to the [Tutorial - User Guide: First Steps](tutorial/index.md){.internal-link target=_blank} right away.
+
+///
 
 If you don't know everything about databases, here's a quick overview.
 
@@ -17,8 +20,11 @@ So, what is a database?
 
 A **database** is a system to store and manage data in a structured and very efficient way.
 
-!!! tip
-    It's very common to abbreviate the word "database" as **"DB"**.
+/// tip
+
+It's very common to abbreviate the word "database" as **"DB"**.
+
+///
 
 As there's a lot of information about databases, and it can get very technical and academic, I'll give you a quick overview about some of the main concepts here.
 
@@ -28,8 +34,11 @@ I'll even tell you a bit about different types of databases, including the ones 
 
 When starting to program, it might **not be obvious** why having a database apart from the code for your program is a **good idea**. Let's start with that.
 
-!!! tip
-    If that's obvious to you, just continue in the next section below. 👇
+/// tip
+
+If that's obvious to you, just continue in the next section below. 👇
+
+///
 
 In your code you already have **variables**, **dictionaries**, **lists**, etc. They all store **data** in some way already. Why would you need to have a separate database?
 
@@ -128,7 +137,7 @@ If we worked with a single table to store our heroes, it could be like this:
 <th>id</th><th>name</th><th>secret_name</th><th>age</th><th>team</th><th>headquarters</th>
 </tr>
 <tr>
-<td>1</td><td>Deadpond</td><td>Dive Wilson</td><td>null</td><td>Z-Factor</td><td>Sister Margaret’s Bar</td>
+<td>1</td><td>Deadpond</td><td>Dive Wilson</td><td>null</td><td>Z-Factor</td><td>Sister Margaret's Bar</td>
 </tr>
 <tr>
 <td>2</td><td>Spider-Boy</td><td>Pedro Parqueador</td><td>null</td><td>Preventers</td><td>Sharp Tower</td>
@@ -157,7 +166,7 @@ We could end up with inconsistent information, having one place saying "Prevente
 <th>id</th><th>name</th><th>secret_name</th><th>age</th><th>team</th><th>headquarters</th>
 </tr>
 <tr>
-<td>1</td><td>Deadpond</td><td>Dive Wilson</td><td>null</td><td>Z-Force</td><td>Sister Margaret’s Bar</td>
+<td>1</td><td>Deadpond</td><td>Dive Wilson</td><td>null</td><td>Z-Force</td><td>Sister Margaret's Bar</td>
 </tr>
 <tr>
 <td>2</td><td>Spider-Boy</td><td>Pedro Parqueador</td><td>null</td><td>Preventers</td><td>Preventers Tower ✅</td>
@@ -176,7 +185,7 @@ We could forget the name of the team and end up adding "Mahjong" with an invalid
 <th>id</th><th>name</th><th>secret_name</th><th>age</th><th>team</th><th>headquarters</th>
 </tr>
 <tr>
-<td>1</td><td>Deadpond</td><td>Dive Wilson</td><td>null</td><td>Z-Force</td><td>Sister Margaret’s Bar</td>
+<td>1</td><td>Deadpond</td><td>Dive Wilson</td><td>null</td><td>Z-Force</td><td>Sister Margaret's Bar</td>
 </tr>
 <tr>
 <td>2</td><td>Spider-Boy</td><td>Pedro Parqueador</td><td>null</td><td>Preventers</td><td>Preventers Tower</td>
@@ -185,7 +194,7 @@ We could forget the name of the team and end up adding "Mahjong" with an invalid
 <td>3</td><td>Rusty-Man</td><td>Tommy Sharp</td><td>48</td><td>Preventers</td><td>Sharp Tower</td>
 </tr>
 <tr>
-<td>4</td><td>Mahjong</td><td>Neena Thurgirl</td><td>31</td><td>Y-Force 🚨</td><td>Sister Margaret’s Bar</td>
+<td>4</td><td>Mahjong</td><td>Neena Thurgirl</td><td>31</td><td>Y-Force 🚨</td><td>Sister Margaret's Bar</td>
 </tr>
 </table>
 
@@ -207,7 +216,7 @@ The table for the teams could look like this:
 <td>1</td><td>Preventers</td><td>Sharp Tower</td>
 </tr>
 <tr>
-<td>2</td><td>Z-Force</td><td>Sister Margaret’s Bar</td>
+<td>2</td><td>Z-Force</td><td>Sister Margaret's Bar</td>
 </tr>
 </table>
 
@@ -308,8 +317,11 @@ Next, it receives the data and puts it in Python objects that you can continue t
 
 I'll tell you more about SQL, SQLModel, how to use them, and how they are related in the next sections.
 
-!!! info "Technical Details"
-    SQLModel is built on top of SQLAlchemy. It is, in fact, just <a href="https://www.sqlalchemy.org/" class="external-link" target="_blank">SQLAlchemy</a> and <a href="https://pydantic-docs.helpmanual.io/" class="external-link" target="_blank">Pydantic</a> mixed together with some sugar on top.
+/// info  | Technical Details
+
+SQLModel is built on top of SQLAlchemy. It is, in fact, just <a href="https://www.sqlalchemy.org/" class="external-link" target="_blank">SQLAlchemy</a> and <a href="https://pydantic-docs.helpmanual.io/" class="external-link" target="_blank">Pydantic</a> mixed together with some sugar on top.
+
+///
 
 ## NoSQL Databases
 

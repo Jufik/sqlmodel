@@ -12,10 +12,13 @@ So, we need to have all those fields **marked as optional**.
 
 And because the `HeroBase` has some of them as *required* and not optional, we will need to **create a new model**.
 
-!!! tip
-    Here is one of those cases where it probably makes sense to use an **independent model** instead of trying to come up with a complex tree of models inheriting from each other.
+/// tip
 
-    Because each field is **actually different** (we just change it to `Optional`, but that's already making it different), it makes sense to have them in their own model.
+Here is one of those cases where it probably makes sense to use an **independent model** instead of trying to come up with a complex tree of models inheriting from each other.
+
+Because each field is **actually different** (we just change it to `Optional`, but that's already making it different), it makes sense to have them in their own model.
+
+///
 
 So, let's create this new `HeroUpdate` model:
 
@@ -27,14 +30,13 @@ So, let's create this new `HeroUpdate` model:
 # Code below omitted 👇
 ```
 
-<details>
-<summary>👀 Full file preview</summary>
+/// details | 👀 Full file preview
 
 ```Python
 {!./docs_src/tutorial/fastapi/update/tutorial001.py!}
 ```
 
-</details>
+///
 
 This is almost the same as `HeroBase`, but all the fields are optional, so we can't simply inherit from `HeroBase`.
 
@@ -52,14 +54,13 @@ We will use a `PATCH` HTTP operation. This is used to **partially update data**,
 # Code below omitted 👇
 ```
 
-<details>
-<summary>👀 Full file preview</summary>
+/// details | 👀 Full file preview
 
 ```Python
 {!./docs_src/tutorial/fastapi/update/tutorial001.py!}
 ```
 
-</details>
+///
 
 We also read the `hero_id` from the *path parameter* and the request body, a `HeroUpdate`.
 
@@ -77,20 +78,19 @@ So, we need to read the hero from the database, with the **same logic** we used 
 # Code below omitted 👇
 ```
 
-<details>
-<summary>👀 Full file preview</summary>
+/// details | 👀 Full file preview
 
 ```Python
 {!./docs_src/tutorial/fastapi/update/tutorial001.py!}
 ```
 
-</details>
+///
 
 ### Get the New Data
 
 The `HeroUpdate` model has all the fields with **default values**, because they all have defaults, they are all optional, which is what we want.
 
-But that also means that if we just call `hero.dict()` we will get a dictionary that could potentially have several or all of those values with their defaults, for example:
+But that also means that if we just call `hero.model_dump()` we will get a dictionary that could potentially have several or all of those values with their defaults, for example:
 
 ```Python
 {
@@ -102,7 +102,7 @@ But that also means that if we just call `hero.dict()` we will get a dictionary 
 
 And then, if we update the hero in the database with this data, we would be removing any existing values, and that's probably **not what the client intended**.
 
-But fortunately Pydantic models (and so SQLModel models) have a parameter we can pass to the `.dict()` method for that: `exclude_unset=True`.
+But fortunately Pydantic models (and so SQLModel models) have a parameter we can pass to the `.model_dump()` method for that: `exclude_unset=True`.
 
 This tells Pydantic to **not include** the values that were **not sent** by the client. Saying it another way, it would **only** include the values that were **sent by the client**.
 
@@ -112,7 +112,7 @@ So, if the client sent a JSON with no values:
 {}
 ```
 
-Then the dictionary we would get in Python using `hero.dict(exclude_unset=True)` would be:
+Then the dictionary we would get in Python using `hero.model_dump(exclude_unset=True)` would be:
 
 ```Python
 {}
@@ -126,7 +126,7 @@ But if the client sent a JSON with:
 }
 ```
 
-Then the dictionary we would get in Python using `hero.dict(exclude_unset=True)` would be:
+Then the dictionary we would get in Python using `hero.model_dump(exclude_unset=True)` would be:
 
 ```Python
 {
@@ -144,20 +144,23 @@ Then we use that to get the data that was actually sent by the client:
 # Code below omitted 👇
 ```
 
-<details>
-<summary>👀 Full file preview</summary>
+/// details | 👀 Full file preview
 
 ```Python
 {!./docs_src/tutorial/fastapi/update/tutorial001.py!}
 ```
 
-</details>
+///
+
+/// tip
+Before SQLModel 0.0.14, the method was called `hero.dict(exclude_unset=True)`, but it was renamed to `hero.model_dump(exclude_unset=True)` to be consistent with Pydantic v2.
+///
 
 ## Update the Hero in the Database
 
-Now that we have a **dictionary with the data sent by the client**, we can iterate for each one of the keys and the values, and then we set them in the database hero model `db_hero` using `setattr()`.
+Now that we have a **dictionary with the data sent by the client**, we can use the method `db_hero.sqlmodel_update()` to update the object `db_hero`.
 
-```Python hl_lines="10-11"
+```Python hl_lines="10"
 # Code above omitted 👆
 
 {!./docs_src/tutorial/fastapi/update/tutorial001.py[ln:76-91]!}
@@ -165,28 +168,25 @@ Now that we have a **dictionary with the data sent by the client**, we can itera
 # Code below omitted 👇
 ```
 
-<details>
-<summary>👀 Full file preview</summary>
+/// details | 👀 Full file preview
 
 ```Python
 {!./docs_src/tutorial/fastapi/update/tutorial001.py!}
 ```
 
-</details>
+///
 
-If you are not familiar with that `setattr()`, it takes an object, like the `db_hero`, then an attribute name (`key`), that in our case could be `"name"`, and a value (`value`). And then it **sets the attribute with that name to the value**.
+/// tip
 
-So, if `key` was `"name"` and `value` was `"Deadpuddle"`, then this code:
+The method `db_hero.sqlmodel_update()` was added in SQLModel 0.0.16. 🤓
 
-```Python
-setattr(db_hero, key, value)
-```
+Before that, you would need to manually get the values and set them using `setattr()`.
 
-...would be more or less equivalent to:
+///
 
-```Python
-db_hero.name = "Deadpuddle"
-```
+The method `db_hero.sqlmodel_update()` takes an argument with another model object or a dictionary.
+
+For each of the fields in the **original** model object (`db_hero` in this example), it checks if the field is available in the **argument** (`hero_data` in this example) and then updates it with the provided value.
 
 ## Remove Fields
 
@@ -210,7 +210,7 @@ So, if the client wanted to intentionally remove the `age` of a hero, they could
 }
 ```
 
-And when getting the data with `hero.dict(exclude_unset=True)`, we would get:
+And when getting the data with `hero.model_dump(exclude_unset=True)`, we would get:
 
 ```Python
 {
@@ -228,4 +228,4 @@ These are some of the advantages of Pydantic, that we can use with SQLModel. �
 
 ## Recap
 
-Using `.dict(exclude_unset=True)` in SQLModel models (and Pydantic models) we can easily update data **correctly**, even in the **edge cases**. 😎
+Using `.model_dump(exclude_unset=True)` in SQLModel models (and Pydantic models) we can easily update data **correctly**, even in the **edge cases**. 😎

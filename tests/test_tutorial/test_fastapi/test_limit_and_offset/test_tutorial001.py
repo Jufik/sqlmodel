@@ -1,3 +1,4 @@
+from dirty_equals import IsDict
 from fastapi.testclient import TestClient
 from sqlmodel import create_engine
 from sqlmodel.pool import StaticPool
@@ -64,7 +65,7 @@ def test_tutorial(clear_sqlmodel):
         response = client.get("/openapi.json")
         assert response.status_code == 200, response.text
         assert response.json() == {
-            "openapi": "3.0.2",
+            "openapi": "3.1.0",
             "info": {"title": "FastAPI", "version": "0.1.0"},
             "paths": {
                 "/heroes/": {
@@ -217,7 +218,16 @@ def test_tutorial(clear_sqlmodel):
                         "properties": {
                             "name": {"title": "Name", "type": "string"},
                             "secret_name": {"title": "Secret Name", "type": "string"},
-                            "age": {"title": "Age", "type": "integer"},
+                            "age": IsDict(
+                                {
+                                    "title": "Age",
+                                    "anyOf": [{"type": "integer"}, {"type": "null"}],
+                                }
+                            )
+                            | IsDict(
+                                # TODO: remove when deprecating Pydantic v1
+                                {"title": "Age", "type": "integer"}
+                            ),
                         },
                     },
                     "HeroRead": {
@@ -227,7 +237,16 @@ def test_tutorial(clear_sqlmodel):
                         "properties": {
                             "name": {"title": "Name", "type": "string"},
                             "secret_name": {"title": "Secret Name", "type": "string"},
-                            "age": {"title": "Age", "type": "integer"},
+                            "age": IsDict(
+                                {
+                                    "title": "Age",
+                                    "anyOf": [{"type": "integer"}, {"type": "null"}],
+                                }
+                            )
+                            | IsDict(
+                                # TODO: remove when deprecating Pydantic v1
+                                {"title": "Age", "type": "integer"}
+                            ),
                             "id": {"title": "Id", "type": "integer"},
                         },
                     },
@@ -239,7 +258,9 @@ def test_tutorial(clear_sqlmodel):
                             "loc": {
                                 "title": "Location",
                                 "type": "array",
-                                "items": {"type": "string"},
+                                "items": {
+                                    "anyOf": [{"type": "string"}, {"type": "integer"}]
+                                },
                             },
                             "msg": {"title": "Message", "type": "string"},
                             "type": {"title": "Error Type", "type": "string"},

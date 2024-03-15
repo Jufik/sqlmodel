@@ -119,14 +119,13 @@ The simplest way to solve it could be to create **multiple models**, each one wi
 # Code below omitted 👇
 ```
 
-<details>
-<summary>👀 Full file preview</summary>
+/// details | 👀 Full file preview
 
 ```Python
 {!./docs_src/tutorial/fastapi/multiple_models/tutorial001.py!}
 ```
 
-</details>
+///
 
 Here's the important detail, and probably the most important feature of **SQLModel**: only `Hero` is declared with `table = True`.
 
@@ -136,8 +135,11 @@ But `HeroCreate` and `HeroRead` don't have `table = True`. They are only **data 
 
 This also means that `SQLModel.metadata.create_all()` won't create tables in the database for `HeroCreate` and `HeroRead`, because they don't have `table = True`, which is exactly what we want. 🚀
 
-!!! tip
-    We will improve this code to avoid duplicating the fields, but for now we can continue learning with these models.
+/// tip
+
+We will improve this code to avoid duplicating the fields, but for now we can continue learning with these models.
+
+///
 
 ## Use Multiple Models to Create a Hero
 
@@ -153,14 +155,13 @@ Let's first check how is the process to create a hero now:
 # Code below omitted 👇
 ```
 
-<details>
-<summary>👀 Full file preview</summary>
+/// details | 👀 Full file preview
 
 ```Python
 {!./docs_src/tutorial/fastapi/multiple_models/tutorial001.py!}
 ```
 
-</details>
+///
 
 Let's check that in detail.
 
@@ -174,15 +175,17 @@ Now we use the type annotation `HeroCreate` for the request JSON data in the `he
 # Code below omitted 👇
 ```
 
-Then we create a new `Hero` (this is the actual **table** model that saves things to the database) using `Hero.from_orm()`.
+Then we create a new `Hero` (this is the actual **table** model that saves things to the database) using `Hero.model_validate()`.
 
-The method `.from_orm()` reads data from another object with attributes and creates a new instance of this class, in this case `Hero`.
+The method `.model_validate()` reads data from another object with attributes (or a dict) and creates a new instance of this class, in this case `Hero`.
 
-The alternative is `Hero.parse_obj()` that reads data from a dictionary.
+In this case, we have a `HeroCreate` instance in the `hero` variable. This is an object with attributes, so we use `.model_validate()` to read those attributes.
 
-But as in this case, we have a `HeroCreate` instance in the `hero` variable. This is an object with attributes, so we use `.from_orm()` to read those attributes.
+/// tip
+In versions of **SQLModel** before `0.0.14` you would use the method `.from_orm()`, but it is now deprecated and you should use `.model_validate()` instead.
+///
 
-With this, we create a new `Hero` instance (the one for the database) and put it in the variable `db_hero` from the data in the `hero` variable that is the `HeroCreate` instance we received from the request.
+We can now create a new `Hero` instance (the one for the database) and put it in the variable `db_hero` from the data in the `hero` variable that is the `HeroCreate` instance we received from the request.
 
 ```Python hl_lines="3"
 # Code above omitted 👆
@@ -208,10 +211,13 @@ And now that we return it, FastAPI will validate the data with the `response_mod
 
 This will validate that all the data that we promised is there and will remove any data we didn't declare.
 
-!!! tip
-    This filtering could be very important and could be a very good security feature, for example, to make sure you filter private data, hashed passwords, etc.
+/// tip
 
-    You can read more about it in the <a href="https://fastapi.tiangolo.com/tutorial/response-model/" class="external-link" target="_blank">FastAPI docs about Response Model</a>.
+This filtering could be very important and could be a very good security feature, for example, to make sure you filter private data, hashed passwords, etc.
+
+You can read more about it in the <a href="https://fastapi.tiangolo.com/tutorial/response-model/" class="external-link" target="_blank">FastAPI docs about Response Model</a>.
+
+///
 
 In particular, it will make sure that the `id` is there and that it is indeed an integer (and not `None`).
 
@@ -261,14 +267,13 @@ So let's create a **base** model `HeroBase` that the others can inherit from:
 # Code below omitted 👇
 ```
 
-<details>
-<summary>👀 Full file preview</summary>
+/// details | 👀 Full file preview
 
 ```Python
 {!./docs_src/tutorial/fastapi/multiple_models/tutorial002.py!}
 ```
 
-</details>
+///
 
 As you can see, this is *not* a **table model**, it doesn't have the `table = True` config.
 
@@ -286,14 +291,13 @@ Let's start with the only **table model**, the `Hero`:
 # Code below omitted 👇
 ```
 
-<details>
-<summary>👀 Full file preview</summary>
+/// details | 👀 Full file preview
 
 ```Python
 {!./docs_src/tutorial/fastapi/multiple_models/tutorial002.py!}
 ```
 
-</details>
+///
 
 Notice that `Hero` now doesn't inherit from `SQLModel`, but from `HeroBase`.
 
@@ -317,14 +321,13 @@ Notice that the parent model `HeroBase`  is not a **table model**, but still, we
 # Code below omitted 👇
 ```
 
-<details>
-<summary>👀 Full file preview</summary>
+/// details | 👀 Full file preview
 
 ```Python
 {!./docs_src/tutorial/fastapi/multiple_models/tutorial002.py!}
 ```
 
-</details>
+///
 
 This won't affect this parent **data model** `HeroBase`.
 
@@ -344,14 +347,13 @@ This is a fun one:
 # Code below omitted 👇
 ```
 
-<details>
-<summary>👀 Full file preview</summary>
+/// details | 👀 Full file preview
 
 ```Python
 {!./docs_src/tutorial/fastapi/multiple_models/tutorial002.py!}
 ```
 
-</details>
+///
 
 What's happening here?
 
@@ -379,14 +381,13 @@ This one just declares that the `id` field is required when reading a hero from 
 # Code below omitted 👇
 ```
 
-<details>
-<summary>👀 Full file preview</summary>
+/// details | 👀 Full file preview
 
 ```Python
 {!./docs_src/tutorial/fastapi/multiple_models/tutorial002.py!}
 ```
 
-</details>
+///
 
 ## Review the Updated Docs UI
 
