@@ -12,7 +12,7 @@ The `team` table will look like this:
 <td>1</td><td>Preventers</td><td>Sharp Tower</td>
 </tr>
 <tr>
-<td>2</td><td>Z-Force</td><td>Sister Margaret’s Bar</td>
+<td>2</td><td>Z-Force</td><td>Sister Margaret's Bar</td>
 </tr>
 </table>
 
@@ -37,19 +37,21 @@ Each row in the table `hero` will point to a row in the table `team`:
 
 <img alt="table relationships" src="/img/tutorial/relationships/select/relationships2.svg">
 
-!!! info
-    We will later update **Spider-Boy** to add him to the **Preventers** team too, but not yet.
+/// info
+
+We will later update **Spider-Boy** to add him to the **Preventers** team too, but not yet.
+
+///
 
 We will continue with the code in the previous example and we will add more things to it.
 
-<details>
-<summary>👀 Full file preview</summary>
+/// details | 👀 Full file preview
 
 ```Python
 {!./docs_src/tutorial/connect/create_tables/tutorial001.py!}
 ```
 
-</details>
+///
 
 Make sure you remove the `database.db` file before running the examples to get the same results.
 
@@ -69,14 +71,13 @@ Let's start by creating two teams:
 # Code below omitted 👇
 ```
 
-<details>
-<summary>👀 Full file preview</summary>
+/// details | 👀 Full file preview
 
 ```Python
 {!./docs_src/tutorial/connect/insert/tutorial001.py!}
 ```
 
-</details>
+///
 
 This would hopefully look already familiar.
 
@@ -100,14 +101,13 @@ Let's not forget to add this function `create_heroes()` to the `main()` function
 # Code below omitted 👇
 ```
 
-<details>
-<summary>👀 Full file preview</summary>
+/// details | 👀 Full file preview
 
 ```Python
 {!./docs_src/tutorial/connect/insert/tutorial001.py!}
 ```
 
-</details>
+///
 
 ## Run it
 
@@ -126,7 +126,7 @@ INFO Engine BEGIN (implicit)
 INFO Engine INSERT INTO team (name, headquarters) VALUES (?, ?)
 INFO Engine [generated in 0.00050s] ('Preventers', 'Sharp Tower')
 INFO Engine INSERT INTO team (name, headquarters) VALUES (?, ?)
-INFO Engine [cached since 0.002324s ago] ('Z-Force', 'Sister Margaret’s Bar')
+INFO Engine [cached since 0.002324s ago] ('Z-Force', 'Sister Margaret's Bar')
 INFO Engine COMMIT
 ```
 
@@ -148,14 +148,13 @@ As the `Hero` class model now has a field (column, attribute) `team_id`, we can 
 # Code below omitted 👇
 ```
 
-<details>
-<summary>👀 Full file preview</summary>
+/// details | 👀 Full file preview
 
 ```Python
 {!./docs_src/tutorial/connect/insert/tutorial001.py!}
 ```
 
-</details>
+///
 
 We haven't committed this hero to the database yet, but there are already a couple of things to pay **attention** to.
 
@@ -187,14 +186,13 @@ Let's now create two more heroes:
 # Code below omitted 👇
 ```
 
-<details>
-<summary>👀 Full file preview</summary>
+/// details | 👀 Full file preview
 
 ```Python
 {!./docs_src/tutorial/connect/insert/tutorial001.py!}
 ```
 
-</details>
+///
 
 When creating `hero_rusty_man`, we are accessing `team_preventers.id`, so that will also trigger a refresh of its data, generating an output of:
 
@@ -233,14 +231,13 @@ Now let's refresh and print those new heroes to see their new ID pointing to the
 # Code below omitted 👇
 ```
 
-<details>
-<summary>👀 Full file preview</summary>
+/// details | 👀 Full file preview
 
 ```Python
 {!./docs_src/tutorial/connect/insert/tutorial001.py!}
 ```
 
-</details>
+///
 
 
 If we execute that in the command line, it will output:
